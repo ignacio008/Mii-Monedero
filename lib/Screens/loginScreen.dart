@@ -82,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Container(
                           color: MyColors.Colors.colorRedBackgroundDark,
                           height: height/3.5,
+                          
                         ),
                       ),
                       Container(
