@@ -74,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
+                      
                       Diagonal(
                         clipShadows: [ClipShadow(color: Colors.black)],
                         position: DiagonalPosition.BOTTOM_LEFT,
@@ -134,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(
                                   fontFamily: 'Futura',
                                   color: Colors.white,
+
                                 ),
                                 decoration: InputDecoration(
                                     hintText: "Correo electrónico",
