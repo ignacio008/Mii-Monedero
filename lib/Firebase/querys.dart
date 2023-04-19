@@ -13,6 +13,9 @@ class QuerysService{
   Future<QuerySnapshot> getAllCategories() async{
     return await _fireStore.collection(FirebaseReferencias.REFERENCE_CATEGORIES).get();
   }
+  Future<QuerySnapshot> getAllScaner(String idScaner) async{
+    return await _fireStore.collection(FirebaseReferencias.REFERENCE_CAMIONES).where('idCamion', isEqualTo: idScaner).get();
+  }
 
   Future<QuerySnapshot> getAllUsers() async{
     return await _fireStore.collection(FirebaseReferencias.REFERENCE_USERS).get();
@@ -58,6 +61,23 @@ class QuerysService{
   }
   Future<QuerySnapshot> getMyCenserRuta(String reference) {
     return  _fireStore.collection("Censers").where("nameRuta", isEqualTo: reference).orderBy("createdOn",  descending: true).get();
+  }
+  Future<bool> SaveGeneralInfoScaneos({String reference, String id, Map<String, dynamic> collectionValues}) async {
+    bool error = false;
+    SetOptions setOptions = SetOptions(merge: true);
+    return await _fireStore.collection(reference).doc(id).set(collectionValues, setOptions).catchError((onError){
+      error = true;
+      return true;
+    }).then((onValue){
+      if(!error){
+        error = false;
+        return error;
+      }
+      else{
+        error = true;
+        return error;
+      }
+    });
   }
   
 

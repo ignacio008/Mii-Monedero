@@ -102,6 +102,37 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
+
+
+          
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () async {
+                
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 20.0, left: 40.0, right: 40.0, bottom: 5.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.red[300],
+                    ),
+                    child: Icon(
+                      Icons.account_balance,
+                      size: 50.0,
+                      color: MyColors.Colors.colorRedBackgroundDark,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              "Escanear código",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           SizedBox(height: 20.0),
           Text(
             "Seleccione una opción",
@@ -217,7 +248,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(
@@ -231,7 +262,7 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Aceptar",
             style: TextStyle(
@@ -276,7 +307,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cerrar",
             style: TextStyle(
@@ -290,7 +321,7 @@ class _MainScreenState extends State<MainScreen> {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Loguearme",
             style: TextStyle(

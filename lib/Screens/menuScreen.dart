@@ -197,7 +197,7 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(
@@ -211,7 +211,7 @@ class _MenuScreenState extends State<MenuScreen> {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Aceptar",
             style: TextStyle(
@@ -256,7 +256,7 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cerrar",
             style: TextStyle(
@@ -270,7 +270,7 @@ class _MenuScreenState extends State<MenuScreen> {
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Loguearme",
             style: TextStyle(

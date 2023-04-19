@@ -629,7 +629,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(
@@ -696,7 +696,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(

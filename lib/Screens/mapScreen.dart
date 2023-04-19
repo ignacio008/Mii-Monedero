@@ -455,7 +455,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(
@@ -530,7 +530,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(
@@ -599,7 +599,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(
             "Cancelar",
             style: TextStyle(

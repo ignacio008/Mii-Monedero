@@ -2,6 +2,7 @@
 
 
 import 'package:mega_monedero/Firebase/querys.dart';
+import 'package:mega_monedero/Models/camionesModel.dart';
 import 'package:mega_monedero/Models/censerModel.dart';
 
 class FetchData{
@@ -16,6 +17,13 @@ class FetchData{
     return iconlistTopChanel;
     
   }
+   Future<List>getScanner(idScaner)async{
+     List<CamionesModel>iconlistVentas=[];
+     final messages= await QuerysService().getAllScaner(idScaner);
+     dynamic  miinfo=messages.docs;
+     iconlistVentas=CamionesModel().getScaner(miinfo);
+     return iconlistVentas;
+   }
 
 
   
