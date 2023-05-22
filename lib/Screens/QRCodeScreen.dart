@@ -11,6 +11,7 @@ import 'package:mega_monedero/Models/codeModel.dart';
 import 'package:mega_monedero/Models/scaneosTotal.dart';
 import 'package:mega_monedero/Models/userModel.dart';
 import 'package:mega_monedero/Screens/loginScreen.dart';
+import 'package:mega_monedero/Screens/screenQrFinal.dart';
 import 'package:mega_monedero/Screens/screenQrResult.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:mega_monedero/MyColors/Colors.dart' as MyColors;
@@ -62,7 +63,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ScreenQrResult(
+            builder: (context) => ScreenQrFinal(
                   userModel: widget.userModel,
                   isActive: isActive,
                   camionesModel: iconModelList[0],

@@ -1,6 +1,7 @@
 import 'package:clippy_flutter/diagonal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mega_monedero/Dialogs/dialogResetContrasena.dart';
 import 'package:mega_monedero/Firebase/authentication.dart';
 import 'package:mega_monedero/Firebase/querys.dart';
 import 'package:mega_monedero/Models/userModel.dart';
@@ -192,15 +193,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0, right: 40.0),
-                    child: Text(
-                      "¿Olvidaste tu contraseña?",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold
+                  GestureDetector(
+                    onTap: (){
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogResetContrasena(
+                            function: _reestablecerContrasena,
+                          )
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0, right: 40.0),
+                      child: Text(
+                        "¿Olvidaste tu contraseña?",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
+                        ),
+                        textAlign: TextAlign.end,
                       ),
-                      textAlign: TextAlign.end,
                     ),
                   ),
                   GestureDetector(
@@ -348,7 +359,7 @@ class _LoginScreenState extends State<LoginScreen> {
     else{
       Authentication().singOut();
       setSpinnerStatus(false);
-      Toast.show("Ha ocurrido un error, por favor reinicie la aplicación", context, duration: Toast.LENGTH_LONG);
+      Toast.show("Ha ocurrido un error, usuario y/o contraseña erronea", context, duration: Toast.LENGTH_LONG);
     }
   }
 
@@ -388,5 +399,9 @@ class _LoginScreenState extends State<LoginScreen> {
       miInfoList.add(usuariosModel);
     }
     return miInfoList;
+  }
+  void _reestablecerContrasena(String correo) async {
+    await Authentication().resetPassword(email: correo);
+    Toast.show("Se ha enviado un correo electrónico al email que escribiste, ahí podrás reestablecer tu contraseña", context, duration: 8, gravity:  Toast.BOTTOM);
   }
 }

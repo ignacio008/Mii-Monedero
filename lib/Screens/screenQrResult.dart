@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mega_monedero/Models/camionesModel.dart';
@@ -9,7 +10,7 @@ class ScreenQrResult extends StatefulWidget {
   UserModel userModel;
   int isActive;
   CamionesModel camionesModel;
-  ScreenQrResult({this.userModel, this.isActive,this.camionesModel});
+  ScreenQrResult({this.userModel, this.isActive, this.camionesModel});
 
   @override
   State<ScreenQrResult> createState() => _ScreenQrResultState();
@@ -35,6 +36,13 @@ class _ScreenQrResultState extends State<ScreenQrResult> {
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: widget.userModel.id)
+        .orderBy('createdOn', descending: true)
+        .limit(1)
+        .snapshots();
+
     final double statusbarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
@@ -64,83 +72,128 @@ class _ScreenQrResultState extends State<ScreenQrResult> {
                   tileMode: TileMode.clamp),
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.69,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
-                        widget.userModel == null
-                            ? "Bienvenido"
-                            : "Bienvenido " + widget.userModel.name,
-                        style: TextStyle(
-                            fontSize: 22.0, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
+          StreamBuilder<QuerySnapshot>(
+              stream: _usersStream,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Container(
+                    color: Colors.red,
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.white,
+                          size: 120,
+                        ),
+                        Text(
+                          'Algo salió mal, por favor recargue la app',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )),
+                  );
+                }
 
-                      SizedBox(height: 2.0),
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                      child: Center(
+                          child: CircularProgressIndicator(
+                    color: Colors.white,
+                  )));
+                }
 
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        child: FadeInImage.assetNetwork(
-                          placeholder: "assets/images/fondo_negro.jpg",
-                          image: widget.userModel.urlProfile,
-                          fit: BoxFit.cover,
-                          width: 100.0,
-                          height: 100.0,
-                          fadeInDuration: Duration(milliseconds: 1000),
+                return ListView(
+                  children: snapshot.data.docs.map((DocumentSnapshot document) {
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.69,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                Text(
+                                  widget.userModel == null
+                                      ? "Bienvenido"
+                                      : "Bienvenido " + widget.userModel.name,
+                                  style: TextStyle(
+                                      fontSize: 22.0,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+
+                                SizedBox(height: 2.0),
+
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder:
+                                        "assets/images/fondo_negro.jpg",
+                                    image: widget.userModel.urlProfile,
+                                    fit: BoxFit.cover,
+                                    width: 100.0,
+                                    height: 100.0,
+                                    fadeInDuration:
+                                        Duration(milliseconds: 1000),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                //   child: Text(
+                                //     widget.userModel.name,
+                                //     style: TextStyle(
+                                //         fontSize: 22.0,
+                                //         fontWeight: FontWeight.bold,
+                                //       color: MyColors.Colors.colorBackgroundDark
+                                //     ),
+                                //   ),
+                                // ),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                // Padding(
+                                // padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                // child: Text(
+                                //   textString,
+                                //   style: TextStyle(
+                                //       fontSize: 16.0,
+                                //   ),
+                                //   textAlign: TextAlign.center,
+                                // ),
+                                // ),
+                                Text(
+                                  widget.isActive == 1
+                                      ? "${textInactive}"
+                                      : "${textActive}      ${formattedDate2}",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      //   child: Text(
-                      //     widget.userModel.name,
-                      //     style: TextStyle(
-                      //         fontSize: 22.0,
-                      //         fontWeight: FontWeight.bold,
-                      //       color: MyColors.Colors.colorBackgroundDark
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      // Padding(
-                      // padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      // child: Text(
-                      //   textString,
-                      //   style: TextStyle(
-                      //       fontSize: 16.0,
-                      //   ),
-                      //   textAlign: TextAlign.center,
-                      // ),
-                      // ),
-                      Text(
-                        widget.isActive == 1
-                            ? "${textInactive}"
-                            : "${textActive}      ${formattedDate2}",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+                    );
+                  }).toList(),
+                );
+              }),
         ],
       ),
     );

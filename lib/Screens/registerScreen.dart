@@ -465,7 +465,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Toast.show("Por favor, necesita subir su foto para continuar", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
       return;
     }
-    if(_name.length < 2){
+    if(_name.length < 10){
       Toast.show("Por favor, escriba su nombre correctamente", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
       return;
     }
