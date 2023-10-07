@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:mega_monedero/Models/censerModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mega_monedero/MyColors/Colors.dart' as MyColors;
@@ -49,10 +48,8 @@ class _CenserDetailsScreenState extends State<CenserDetailsScreen> {
   }
 
   _getDistance() async {
-    double distanceInMeters = await Geolocator().distanceBetween(widget.latitude, widget.longitude, widget.censerModel.latitude, widget.censerModel.longitude);
-    setState(() {
-      distancia = (distanceInMeters/1000).toStringAsFixed(2); // 1.000e+21
-    });
+   
+  
   }
 
   @override

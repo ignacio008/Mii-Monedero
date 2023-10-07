@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mega_monedero/Firebase/querys.dart';
 import 'package:mega_monedero/Models/censerModel.dart';
 import 'package:mega_monedero/Models/localitiesModel.dart';
@@ -29,7 +28,6 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
 
-  Completer<GoogleMapController> _controller = Completer();
   List<StateModel> stateList = [];
   List<LocalityModel> localityList = [];
   List<LocalityModel> localityListFiltered = [];
@@ -73,20 +71,12 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(0.0, -122.085749655962),
-    zoom: 14.4746,
-  );
+  
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+ 
 
   List<CenserModel> censerList = [];
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
-
+ 
   void setSpinnerStatus(bool status){
     setState(() {
       _showSpinner = status;
@@ -100,8 +90,7 @@ class _MapScreenState extends State<MapScreen> {
 
     if(censerList.length > 0){
 
-      markers.clear();
-      generateMarkers();
+     
       setSpinnerStatus(false);
 
     }
@@ -222,50 +211,7 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  Future<Set<Marker>> generateMarkers() async {
 
-    final MarkerId myMarkerId = MarkerId("myPosition");
-    final Marker myMarker = Marker(
-      markerId: myMarkerId,
-      icon: await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(size: Size(24, 24)), 'assets/images/current_user_location.png'),
-      position: LatLng(
-        widget.latitude,
-        widget.longitude,
-      ),
-      //infoWindow: InfoWindow(title: w.nombre, snippet: widget.restauranteModel.categoria),
-      onTap: () {
-
-        //_onMarkerTapped(markerId);
-      },
-    );
-    markers[myMarkerId] = myMarker;
-
-    for(int i = 0; i < censerList.length; i++){
-      // creating a new MARKER
-      final MarkerId markerId = MarkerId(censerList[i].id);
-      final Marker marker = Marker(
-        markerId: markerId,
-        position: LatLng(
-          censerList[i].latitude,
-          censerList[i].longitude,
-        ),
-        infoWindow: InfoWindow(title: censerList[i].name, snippet: censerList[i].name, onTap: (){
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (context) => CenserDetailsScreen (censerModel: censerList[i], latitude: widget.latitude, longitude: widget.longitude)
-          ));
-        }),
-      );
-      markers[markerId] = marker;
-    }
-
-    setState(() {
-
-    });
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,20 +220,7 @@ class _MapScreenState extends State<MapScreen> {
         inAsyncCall: _showSpinner,
         child: Stack(
           children: <Widget>[
-            GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition:
-              CameraPosition(
-                //bearing: 19,
-                  target: LatLng(_focusLatitude, _focusLongitude),
-                  //tilt: 59.440717697143555,
-                  zoom: 10),
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-                generateMarkers();
-              },
-              markers: Set<Marker>.of(markers.values), // YOUR MARKS IN MAP
-            ),
+           
             Column(
               children: <Widget>[
                 SizedBox(
@@ -403,11 +336,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(_focusLatitude, _focusLongitude),
-      zoom: 9.9746,
-    )));
+  
   }
 
   void _showCategories(){

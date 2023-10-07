@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: height/3.5,
                         child: Center(
                           child: Text(
-                            "MII MONEDERO USUARIO",
+                            "Mii Pasaje Móvil",
                             style: TextStyle(
                                 fontSize: 28.0,
                                 color: Colors.white,

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart' as Geo;
-import 'package:location/location.dart';
 import 'package:mega_monedero/Firebase/authentication.dart';
 import 'package:mega_monedero/Firebase/querys.dart';
 import 'package:mega_monedero/Models/userModel.dart';
@@ -24,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _userComplete = false;
   bool _locationComplete = false;
   List<UserModel> usuarios = [];
-  Geo.Position position;
 
   void getCurrentUser() async{
     var user = await Authentication().getCurrentUser();
@@ -68,38 +65,19 @@ class _SplashScreenState extends State<SplashScreen> {
     else{
       print("GPS desactivado");
     }*/
-    Location location = new Location();
 
     bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    LocationData _locationData;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
+  
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.DENIED) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.GRANTED) {
-        return;
-      }
-    }
+   
 
     /*_locationData = await location.getLocation();
     setState(() {
       latlng = _locationData.latitude.toString() + ", " + _locationData.longitude.toString();
     });*/
 
-    position = await Geo.Geolocator().getCurrentPosition(desiredAccuracy: Geo.LocationAccuracy.high);
-    _locationComplete = true;
-    setState(() {
-      latlng = position.latitude.toString() + ", " + position.longitude.toString();
-    });
+    
 
 
 
@@ -113,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => QRCodeScreen (latitud: position.latitude, longitud: position.longitude, userModel: usuarios[0])
+                  builder: (context) => QRCodeScreen (userModel: usuarios[0])
               )
           );
         });
@@ -128,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => LoginScreen (latitude: position.latitude, longitude: position.longitude,)
+                builder: (context) => LoginScreen ()
             )
         );
       });
@@ -150,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => QRCodeScreen (latitud: position.latitude, longitud: position.longitude, userModel: usuarios[0],)
+                builder: (context) => QRCodeScreen ( userModel: usuarios[0],)
             )
         );
       }
@@ -222,7 +200,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
-                    "MII MONEDERO USUARIO",
+                    "Mii Pasaje Móvil",
                     style: TextStyle(
                       fontSize: 28.0,
                       color: Colors.white,

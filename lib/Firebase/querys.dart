@@ -13,6 +13,9 @@ class QuerysService{
   Future<QuerySnapshot> getAllCategories() async{
     return await _fireStore.collection(FirebaseReferencias.REFERENCE_CATEGORIES).get();
   }
+  Future<DocumentSnapshot> getAdimDocument(id) async{
+   return await _fireStore.collection("Users").doc(id).get();
+   }
   Future<QuerySnapshot> getAllScaner(String idScaner) async{
     return await _fireStore.collection(FirebaseReferencias.REFERENCE_CAMIONES).where('idCamion', isEqualTo: idScaner).get();
   }
@@ -79,7 +82,22 @@ class QuerysService{
       }
     });
   }
+  Future<bool> actualizarInfoUser({String reference, String id, Map<String, dynamic> collectionValues}) async {
+    bool error = false;
+    return await _fireStore.collection(reference).doc(id).update(collectionValues).catchError((onError){
+      error = true;
+      return true;
+    }).then((onValue){
+      if(!error){
+        error = false;
+        return error;
+      }
+      else{
+        error = true;
+        return error;
+      }
+    });
+  }
   
-
 
 }

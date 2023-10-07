@@ -10,6 +10,7 @@ import 'package:mega_monedero/Models/camionesModel.dart';
 import 'package:mega_monedero/Models/codeModel.dart';
 import 'package:mega_monedero/Models/scaneosTotal.dart';
 import 'package:mega_monedero/Models/userModel.dart';
+import 'package:mega_monedero/Screens/drawer.dart';
 import 'package:mega_monedero/Screens/loginScreen.dart';
 import 'package:mega_monedero/Screens/screenQrFinal.dart';
 import 'package:mega_monedero/Screens/screenQrResult.dart';
@@ -116,30 +117,37 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
     final double statusbarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+                  "Mii Pasaje Móvil",
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      MyColors.Colors.colorRedBackgroundDark,
+                      MyColors.Colors.colorRedBackgroundLight
+                    ],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(0.5, 0.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp),
+              ),
+        ),
+      ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: statusbarHeight),
-            height: statusbarHeight + barHeight,
-            child: Center(
-              child: Text(
-                "MII MONEDERO",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [
-                    MyColors.Colors.colorRedBackgroundDark,
-                    MyColors.Colors.colorRedBackgroundLight
-                  ],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(0.5, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
+          Center(
+            child: Text(
+              "Mii Pasaje Móvil",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(
@@ -209,10 +217,11 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         height: 180,
-                        child: Expanded(
-                          flex: 1,
-                          child: GestureDetector(
-                            onTap: () async {
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (widget.userModel.suspended == true) {
+                              _dialogBuilder(context);
+                            } else {
                               // String cameraScanResult = await scanner.scan();
                               String cameraScanResult =
                                   await FlutterBarcodeScanner.scanBarcode(
@@ -228,23 +237,23 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                                 print(
                                     "Lo sentimos no has selecionado un codigo QR valido");
                               }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20.0,
-                                  left: 40.0,
-                                  right: 40.0,
-                                  bottom: 5.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: Colors.red[800],
-                                ),
-                                child: Icon(
-                                  Icons.qr_code_scanner_rounded,
-                                  size: 80.0,
-                                  color: Colors.white,
-                                ),
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20.0,
+                                left: 40.0,
+                                right: 40.0,
+                                bottom: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: Colors.red[800],
+                              ),
+                              child: Icon(
+                                Icons.qr_code_scanner_rounded,
+                                size: 80.0,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -301,7 +310,11 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
           ),
         ],
       ),
+       drawer:_getDrawer(context),
     );
+  }
+  Widget _getDrawer(BuildContext context) {
+    return DrawerMenu(widget.userModel);
   }
 
   void _showAlertCerrarSesion() {
@@ -378,65 +391,67 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       DateTime now = DateTime.now();
       isActive = now.compareTo(widget.userModel.activeUntil);
 
-      if (widget.userModel.state == codeModel.state &&
-          widget.userModel.locality == codeModel.locality) {
-        print("Exito estado y municipio iguales");
+      // if (widget.userModel.state == codeModel.state &&
+      //     widget.userModel.locality == codeModel.locality) {
+      //   print("Exito estado y municipio iguales");
 
-        if (isActive == 1) {
-          getlista(codeModel.id);
-           Toast.show("Lo sentimos no eatas Activo", context,
+      if (isActive == 1) {
+        getlista(codeModel.id);
+        Toast.show("Lo sentimos no estas Activo", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          // textString = textInactive;
-          //       scaneoTrue() async {
-          //      DateTime now = DateTime.now();
-          //      bool erroguardar = await QuerysService().SaveGeneralInfoScaneos(
-          //        reference: "Scaneos",
-          //        id: id_variable,
-          //        collectionValues: ScaneosModel().toJsonBodyScaner(
-          //            id_variable,
-          //            widget.censerModel.id,
-          //            widget.userModel.id,
-          //            widget.userModel.locality,
-          //            widget.userModel.state,
-          //            now,
-          //            widget.censerModel.email,
-          //            widget.userModel.email),
-          //      );
-          //  }
-          //                scaneoTrue() async {
-          //     DateTime now = DateTime.now();
-          //     bool erroguardar = await QuerysService().SaveGeneralInfoScaneos(
-          //       reference: "Scaneos",
-          //       id: id_variable,
-          //       collectionValues: ScaneosModel().toJsonBodyScaner(
-          //           id_variable,
-          //           iconModelList[0].idCamionero,
-          //           widget.userModel.id,
-          //           widget.userModel.locality,
-          //           widget.userModel.state,
-          //           now,
-          //           widget.userModel.urlProfile,
-          //           widget.userModel.email,
-          //           codeModel.id),
-          //     );
-          // }
-        } else {
-          String formattedDate2 =
-              DateFormat('dd-MM-yyyy').format(widget.userModel.activeUntil);
-          textString = '${textActive}      ${formattedDate2}';
-          getlista(codeModel.id);
-          Toast.show("Activo", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        }
+        // textString = textInactive;
+        //       scaneoTrue() async {
+        //      DateTime now = DateTime.now();
+        //      bool erroguardar = await QuerysService().SaveGeneralInfoScaneos(
+        //        reference: "Scaneos",
+        //        id: id_variable,
+        //        collectionValues: ScaneosModel().toJsonBodyScaner(
+        //            id_variable,
+        //            widget.censerModel.id,
+        //            widget.userModel.id,
+        //            widget.userModel.locality,
+        //            widget.userModel.state,
+        //            now,
+        //            widget.censerModel.email,
+        //            widget.userModel.email),
+        //      );
+        //  }
+        //                scaneoTrue() async {
+        //     DateTime now = DateTime.now();
+        //     bool erroguardar = await QuerysService().SaveGeneralInfoScaneos(
+        //       reference: "Scaneos",
+        //       id: id_variable,
+        //       collectionValues: ScaneosModel().toJsonBodyScaner(
+        //           id_variable,
+        //           iconModelList[0].idCamionero,
+        //           widget.userModel.id,
+        //           widget.userModel.locality,
+        //           widget.userModel.state,
+        //           now,
+        //           widget.userModel.urlProfile,
+        //           widget.userModel.email,
+        //           codeModel.id),
+        //     );
+        // }
       } else {
-        print("Lo sentimos no eatas en el mismo lugar que el camion");
-        Toast.show("Lo sentimos no estas registrado en la misma ruta que el camion", context,
+        String formattedDate2 =
+            DateFormat('dd-MM-yyyy').format(widget.userModel.activeUntil);
+        textString = '${textActive}      ${formattedDate2}';
+        getlista(codeModel.id);
+        Toast.show("Activo", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        return;
       }
+    }
 
-      // _getVincular(codeModel.id);
-    } else {
+    //  else {
+    //   print("Lo sentimos no estas en el mismo lugar que el camion");
+    //   Toast.show("Lo sentimos no estas registrado en la misma ruta que el camion", context,
+    //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    //   return;
+    // }
+
+    // _getVincular(codeModel.id);
+    else {
       DateTime activeUntil = DateFormat("yyyy-MM-dd").parse(codeModel.dateTime);
       DateTime now = DateTime.now();
 
@@ -447,5 +462,102 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       print("Usuario inactivo");
       // _getMiInfo(codeModel.id, false);
     }
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(0, 176, 88, 88),
+          content: Container(
+            height: 304,
+            decoration: BoxDecoration(
+                color: Colors.redAccent,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.all(Radius.circular(12))),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.network(
+                      "https://cdn.pixabay.com/animation/2023/04/28/18/34/18-34-10-554_512.gif",
+                      height: 90,
+                      width: 90,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.red,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                    // Image.network(
+                    //             "https://cdn.pixabay.com/animation/2023/04/28/18/34/18-34-10-554_512.gif",
+                    //             height: 90,
+                    //             width: 90,
+                    //           ),
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12))),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  child: Text(
+                    'Cuenta suspendida, Comunicate al 7331274925 para mayor información',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 2),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: Color.fromARGB(0, 255, 255, 255)),
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

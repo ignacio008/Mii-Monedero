@@ -4,6 +4,7 @@
 import 'package:mega_monedero/Firebase/querys.dart';
 import 'package:mega_monedero/Models/camionesModel.dart';
 import 'package:mega_monedero/Models/censerModel.dart';
+import 'package:mega_monedero/Models/userModel.dart';
 
 class FetchData{
 
@@ -24,6 +25,13 @@ class FetchData{
      iconlistVentas=CamionesModel().getScaner(miinfo);
      return iconlistVentas;
    }
+   Future <UserModel> getAdmin(id)async{  
+      final messages= await QuerysService().getAdimDocument(id);
+      dynamic  miinfo=messages;
+      print(miinfo.data().toString());
+      UserModel adminmodel = UserModel().getUsuario(miinfo);
+      return adminmodel;
+     }
 
 
   
